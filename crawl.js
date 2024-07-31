@@ -4,14 +4,20 @@ function getURLsFromHTML(htmlBody, baseURL) {
     const dom = new JSDOM(htmlBody)
     const linkArray = dom.window.document.querySelectorAll('a')
     const hrefArray = []
-    for (let i = 0; i < linkArray.length; i++) {
-        const newLink = linkArray[i].href
-        if (newLink.includes('http')) {
-            hrefArray.push(newLink.slice(0, -1))
-        } else {
-            hrefArray.push(`${baseURL}${newLink}`)
+
+    for (const link of linkArray) {
+        if (link.hasAttribute('href')) {
+            let href = link.getAttribute('href')
+
+            try {
+                href = new URL(href, baseURL).href
+                hrefArray.push(href)
+            } catch(err) {
+                console.log(`${err.message}: ${href}`)
+            }
         }
     }
+
     return hrefArray;
 }
 
@@ -35,37 +41,44 @@ async function getPageHTML(currentURL) {
     }
 
     if (response.status > 399) {
-        console.log(`Status error: ${response.status}`)
-        return
+        throw new Error(`Status error: ${response.status}`)
     }
 
     const contentType = response.headers.get('Content-Type')
     if (!contentType || !contentType.includes('text/html')) {
-        console.log(`Non-HTML response: ${contentType}`)
-        return
+        throw new Error(`Non-HTML response: ${contentType}`)
     }
 
-    return await response.text()
+    return response.text()
 }
 
 async function crawlPage(baseURL, currentURL = baseURL, pages = {}) {
-    if (!currentURL.includes(baseURL)) {
+    const currentURLObj = new URL(currentURL)
+    const baseURLObj = new URL(baseURL)
+    if (currentURLObj.hostname !== baseURLObj.hostname) {
         return pages
     }
+
     const normCurrURL = normalizeURL(currentURL)
     if (!(normCurrURL in pages)) {
         pages[normCurrURL] = 1
     } else {
-        pages[normCurrURL] += 1
+        pages[normCurrURL]++
         return pages
     }
 
 
-    const pageHTML = await getPageHTML(currentURL)
+    console.log(`crawling ${currentURL}`)
+    let pageHTML = ''
+    try {
+        pageHTML = await getPageHTML(currentURL)
+    } catch (err) {
+        console.log(`${err.message}`)
+    }
     const pageURLs = await getURLsFromHTML(pageHTML, baseURL)
 
     for (let page of pageURLs) {
-        crawlPage(baseURL, page, pages)
+        pages = await crawlPage(baseURL, page, pages)
     }
 
     return pages
