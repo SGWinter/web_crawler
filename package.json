@@ -1,0 +1,26 @@
+{
+  "name": "web_crawler",
+  "version": "1.0.0",
+  "description": "web crawler project",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node main.js",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+  },
+  "jest": {
+    "transform": {}
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SGWinter/web_crawler.git"
+  },
+  "author": "Sean Gallacher",
+  "bugs": {
+    "url": "https://github.com/SGWinter/web_crawler/issues"
+  },
+  "homepage": "https://github.com/SGWinter/web_crawler#readme",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
