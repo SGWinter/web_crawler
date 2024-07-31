@@ -1,6 +1,5 @@
 import { test, expect } from "@jest/globals";
-import { normalizeURL } from "./crawl.js";
-import { getURLsFromHTML } from "./crawl.js";
+import { normalizeURL, getURLsFromHTML } from "./crawl.js";
 
 test('normalizing URL https long', () => {
     const baseURL = 'https://blog.boot.dev/path/'

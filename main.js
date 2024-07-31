@@ -1,4 +1,6 @@
-function main() {
+import { crawlPage } from "./crawl.js"
+
+async function main() {
     const argv = process.argv
     if (argv.length < 3) {
         console.error(`Please provide an argument`)
@@ -8,6 +10,7 @@ function main() {
     }
     const baseURL = process.argv[2]
     console.log(`Crawler is starting at ${baseURL}`)
+    console.log(await crawlPage(baseURL))
 }
 
 main()
