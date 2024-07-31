@@ -6,9 +6,8 @@ function main() {
     if (argv.length > 3) {
         console.error(`Too many arguments provided`)
     }
-    if (argv.length === 3) {
-        console.log(`Crawler is starting at ${argv[2]}`)
-    }
+    const baseURL = process.argv[2]
+    console.log(`Crawler is starting at ${baseURL}`)
 }
 
 main()
