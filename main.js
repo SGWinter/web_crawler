@@ -12,6 +12,7 @@ async function main() {
     const baseURL = process.argv[2]
     console.log(`Crawler is starting at ${baseURL}`)
     const pages = await crawlPage(baseURL)
+    console.log('Report is generating')
     printReport(pages)
 }
 

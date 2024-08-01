@@ -1,8 +1,10 @@
 function printReport(pages) {
-    console.log('Report is generating')
+    console.log('================')
+    console.log('REPORT')
+    console.log('================')
     const sortedPages = sortPages(pages)
     for (let page in sortedPages) {
-        console.log(`${page} has ${sortedPages[page]} internal links`)
+        console.log(`Found ${sortedPages[page]} internal links to ${page}`)
     }
 }
 
